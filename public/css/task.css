@@ -1,0 +1,45 @@
+.todo-widget .todo-list .todo-item {
+  border: 0px;
+  margin-bottom: 0px;
+  padding: 20px 15px 15px 0px;
+}
+
+.todo-widget .todo-list .todo-item .custom-checkbox {
+  width: 100%;
+}
+
+.todo-widget .todo-list .todo-item .custom-checkbox .todo-label {
+  font-weight: 400;
+  width: 100%;
+}
+
+.todo-widget .todo-list .todo-item .assignedto {
+  padding: 0 0 0 25px;
+  margin: 0px;
+}
+
+.todo-widget .todo-list .todo-item .assignedto .assignee {
+  padding: 0px;
+  display: inline-block;
+  border: 0px;
+  margin-right: 2px;
+}
+
+.todo-widget .todo-list .todo-item .assignedto .assignee .assignee-img {
+  width: 30px;
+  border-radius: 100%;
+}
+
+.todo-widget .todo-list .todo-item .item-date {
+  padding-left: 25px;
+  font-size: 12px;
+  margin-top: 5px;
+  display: inline-block;
+  /*color: $text-muted;*/
+}
+
+.list-task .task-done .todo-desc,
+.list-task .task-done .badge {
+  border: 1px solid red;
+}
+
