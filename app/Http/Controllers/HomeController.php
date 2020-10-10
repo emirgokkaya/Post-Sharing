@@ -61,7 +61,8 @@ class HomeController extends Controller
 
     public function about()
     {
-        return view('about');
+	return redirect()->back();
+        // return view('about');
     }
 
     public function blogs()
@@ -75,8 +76,11 @@ class HomeController extends Controller
         $blog = News::whereSlug($slug)->where('state', 1)->where('block', 1)->with('user')->with('category')->firstOrFail();
         $comments = Comment::where('news_id', $blog->id)->where('state', 1)->with('user')->orderBy('created_at', 'DESC')->get();
         $likes = Like::where('news_id', $blog->id)->count();
-        $css = Like::where('user_id', auth()->user()->id)->where('news_id', $blog->id)->count();
-
+	if(auth()->user()) {
+          $css = Like::where('user_id', auth()->user()->id)->where('news_id', $blog->id)->count();
+	} else {
+	   $css = 0;
+	}
         return view('blog_detail')->with('blog', $blog)->with('comments', $comments)->with('likes', $likes)->with('css', $css);
     }
 
