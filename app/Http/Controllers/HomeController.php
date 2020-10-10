@@ -26,6 +26,7 @@ class HomeController extends Controller
         SEOMeta::setTitle(env('APP_NAME'));
         SEOMeta::setDescription('Yazılım blog paylaşma platformu');
         SEOMeta::setCanonical('https://emirgokkaya.com');
+        SEOMeta::addKeyword(['blog', 'paylaşım', env('APP_NAME'), 'post']);
 
         OpenGraph::setTitle('emirgokkaya');
         OpenGraph::setDescription('Yazılım blog paylaşma platformu');
