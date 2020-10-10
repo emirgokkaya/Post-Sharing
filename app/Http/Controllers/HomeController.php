@@ -9,6 +9,9 @@ use App\Mail\MessageBulletin;
 use App\News;
 use App\NewsByCategory;
 use App\Slider;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\TwitterCard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +22,19 @@ class HomeController extends Controller
 {
     public function index()
     {
+
+        SEOMeta::setTitle('emirgokkaya');
+        SEOMeta::setDescription('Yazılım blog paylaşma platformu');
+        SEOMeta::setCanonical('https://emirgokkaya.com');
+
+        OpenGraph::setTitle('emirgokkaya');
+        OpenGraph::setDescription('Yazılım blog paylaşma platformu');
+        OpenGraph::setUrl('https://emirgokkaya.com');
+        OpenGraph::addProperty('type', 'blogs');
+
+        TwitterCard::setTitle('emirgokkaya');
+        TwitterCard::setSite('@emirgokkaya');
+
         $sliders = Slider::where('state', 1)->with('user')->limit(3)->get();
 
         /*if (News::where('state', 1)->with('user')->with('category')->orderBy('created_at', 'DESC')->first() != null) {
@@ -61,26 +77,57 @@ class HomeController extends Controller
 
     public function about()
     {
-	return redirect()->back();
+	    return redirect()->back();
         // return view('about');
     }
 
     public function blogs()
     {
         $blogs = News::with('category')->with('user')->where('state', 1)->where('block', 1)->orderBy('created_at', 'DESC')->paginate(7);
+
+        SEOMeta::setTitle('Bloglar');
+        SEOMeta::setDescription('Tüm Bloglar');
+        SEOMeta::addKeyword(['blog', 'içerik', 'yazılım', 'post', 'bloglar', 'developer', 'content']);
+
+        OpenGraph::setDescription('Tüm Bloglar');
+        OpenGraph::setTitle('Bloglar');
+        OpenGraph::setUrl(route('blogs'));
+        OpenGraph::addProperty('type', 'blogs');
+
+        TwitterCard::setTitle('emirgokkaya');
+        TwitterCard::setSite('@emirgokkaya');
+
         return view('blogs')->with('blogs', $blogs);
     }
 
     public function blog_detail($slug)
     {
         $blog = News::whereSlug($slug)->where('state', 1)->where('block', 1)->with('user')->with('category')->firstOrFail();
+
+        SEOMeta::setTitle($blog->title);
+        SEOMeta::setDescription($blog->summary);
+        SEOMeta::addMeta('blog:published_time', $blog->created_at->toW3CString(), 'property');
+        SEOMeta::addMeta('blog:section', $blog->category->name, 'property');
+        SEOMeta::addKeyword([$blog->category->name, 'kategoriler', 'bloglar', 'postlar', 'blogs', 'post', 'categories', 'category']);
+
+        OpenGraph::setDescription($blog->summary);
+        OpenGraph::setTitle($blog->title);
+        OpenGraph::setUrl(route('blog_detail', ['slug' => $blog->slug]));
+        OpenGraph::addProperty('type', 'blog');
+        OpenGraph::addProperty('locale', 'tr-TR');
+        OpenGraph::addProperty('locale:alternate', ['en-us']);
+        OpenGraph::addImage($blog->image);
+
+        TwitterCard::setTitle('emirgokkaya');
+        TwitterCard::setSite('@emirgokkaya');
+
         $comments = Comment::where('news_id', $blog->id)->where('state', 1)->with('user')->orderBy('created_at', 'DESC')->get();
         $likes = Like::where('news_id', $blog->id)->count();
-	if(auth()->user()) {
-          $css = Like::where('user_id', auth()->user()->id)->where('news_id', $blog->id)->count();
-	} else {
-	   $css = 0;
-	}
+        if(auth()->user()) {
+              $css = Like::where('user_id', auth()->user()->id)->where('news_id', $blog->id)->count();
+        } else {
+           $css = 0;
+        }
         return view('blog_detail')->with('blog', $blog)->with('comments', $comments)->with('likes', $likes)->with('css', $css);
     }
 
@@ -142,6 +189,19 @@ class HomeController extends Controller
 
     public function categories()
     {
+        SEOMeta::setTitle('Kategoriler');
+        SEOMeta::setDescription('Kategorilerine göre blog listesi');
+        SEOMeta::addKeyword(['blog', 'kategori', 'kategoriler', 'categories', 'category', 'yazılım', 'post', 'bloglar', 'developer', 'content']);
+
+        OpenGraph::setDescription('Tüm Kategoriler');
+        OpenGraph::setTitle('Kategoriler');
+        OpenGraph::setUrl(route('categories'));
+        OpenGraph::addProperty('type', 'categories');
+
+        TwitterCard::setTitle('emirgokkaya');
+        TwitterCard::setSite('@emirgokkaya');
+
+
         $categories = NewsByCategory::with(['news' => function($query) {
             $query->where('state', 1)->where('block', 1);
         }])->paginate(6);
@@ -157,7 +217,23 @@ class HomeController extends Controller
         })->orderBy('created_at', 'DESC')->paginate(7);
 
         $category_name = NewsByCategory::whereSlug($slug)->firstOrFail()->name;
+        $category_slug = NewsByCategory::whereSlug($slug)->firstOrFail()->slug;
 
+
+        SEOMeta::setTitle($category_name);
+        SEOMeta::setDescription($category_name . ' kategorisine ait bloglar');
+        SEOMeta::addMeta('category:section', $category_name, 'property');
+        SEOMeta::addKeyword($category_name);
+
+        OpenGraph::setDescription($category_name . ' kategorisine ait bloglar');
+        OpenGraph::setTitle($category_name);
+        OpenGraph::setUrl(route('category_blogs', ['slug', $category_slug]));
+        OpenGraph::addProperty('type', 'category_blogs');
+        OpenGraph::addProperty('locale', 'tr-TR');
+        OpenGraph::addProperty('locale:alternate', ['en-us']);
+
+        TwitterCard::setTitle('emirgokkaya');
+        TwitterCard::setSite('@emirgokkaya');
 
         return view('blogs')->with('blogs', $blogs)->with('category_name', $category_name);
     }
@@ -169,6 +245,23 @@ class HomeController extends Controller
         })->orderBy('created_at', 'DESC')->paginate(7);
 
         $user = \App\User::where('name', $name)->where('id', $id)->firstOrFail()->name;
+        $user_id = \App\User::where('name', $name)->where('id', $id)->firstOrFail()->id;
+
+        SEOMeta::setTitle($user);
+        SEOMeta::setDescription($user . ' kullanıcısına ait içerikler');
+        SEOMeta::addMeta('user:section', $user, 'property');
+        SEOMeta::addKeyword($user);
+
+        OpenGraph::setDescription($user . ' kullanıcısına ait içerikler');
+        OpenGraph::setTitle($user);
+        OpenGraph::setUrl(route('user_blogs', ['name' => $user, 'id' => $user_id]));
+        OpenGraph::addProperty('type', 'user_blogs');
+        OpenGraph::addProperty('locale', 'tr-TR');
+        OpenGraph::addProperty('locale:alternate', ['en-us']);
+
+        TwitterCard::setTitle('emirgokkaya');
+        TwitterCard::setSite('@emirgokkaya');
+
 
         return view('blogs')->with('blogs', $blogs)->with('user_name', $user);
     }
@@ -223,7 +316,6 @@ class HomeController extends Controller
         }
 
     }
-
 
     public function search_post(Request $request)
     {

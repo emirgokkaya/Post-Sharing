@@ -6,8 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href="{{ asset('../../assets/extra-libs/toastr/dist/build/toastr.min.css') }}" rel="stylesheet">
 
-    <!-- Document Title -->
-    <title>BizBlog</title>
+    {!! \Artesaos\SEOTools\Facades\SEOMeta::generate() !!}
+    {!! \Artesaos\SEOTools\Facades\OpenGraph::generate() !!}
+    {!! Twitter::generate() !!}
+    {!! \Artesaos\SEOTools\Facades\JsonLd::generate() !!}
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">

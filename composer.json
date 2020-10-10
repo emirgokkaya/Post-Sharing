@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "artesaos/seotools": "^0.19.0",
         "cviebrock/eloquent-sluggable": "^7.0",
         "fedeisas/laravel-mail-css-inliner": "^3.1",
         "fideloper/proxy": "^4.2",
