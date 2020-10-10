@@ -23,7 +23,7 @@ class HomeController extends Controller
     public function index()
     {
 
-        SEOMeta::setTitle('emirgokkaya');
+        SEOMeta::setTitle(env('APP_NAME'));
         SEOMeta::setDescription('Yazılım blog paylaşma platformu');
         SEOMeta::setCanonical('https://emirgokkaya.com');
 
