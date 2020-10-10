@@ -32,8 +32,8 @@ class HomeController extends Controller
         OpenGraph::setUrl('https://emirgokkaya.com');
         OpenGraph::addProperty('type', 'blogs');
 
-        TwitterCard::setTitle('emirgokkaya');
-        TwitterCard::setSite('@emirgokkaya');
+        TwitterCard::setTitle('emirgokkaya_');
+        TwitterCard::setSite('@emirgokkaya_');
 
         $sliders = Slider::where('state', 1)->with('user')->limit(3)->get();
 
@@ -94,8 +94,8 @@ class HomeController extends Controller
         OpenGraph::setUrl(route('blogs'));
         OpenGraph::addProperty('type', 'blogs');
 
-        TwitterCard::setTitle('emirgokkaya');
-        TwitterCard::setSite('@emirgokkaya');
+        TwitterCard::setTitle('emirgokkaya_');
+        TwitterCard::setSite('@emirgokkaya_');
 
         return view('blogs')->with('blogs', $blogs);
     }
@@ -118,8 +118,8 @@ class HomeController extends Controller
         OpenGraph::addProperty('locale:alternate', ['en-us']);
         OpenGraph::addImage($blog->image);
 
-        TwitterCard::setTitle('emirgokkaya');
-        TwitterCard::setSite('@emirgokkaya');
+        TwitterCard::setTitle('emirgokkaya_');
+        TwitterCard::setSite('@emirgokkaya_');
 
         $comments = Comment::where('news_id', $blog->id)->where('state', 1)->with('user')->orderBy('created_at', 'DESC')->get();
         $likes = Like::where('news_id', $blog->id)->count();
@@ -198,8 +198,8 @@ class HomeController extends Controller
         OpenGraph::setUrl(route('categories'));
         OpenGraph::addProperty('type', 'categories');
 
-        TwitterCard::setTitle('emirgokkaya');
-        TwitterCard::setSite('@emirgokkaya');
+        TwitterCard::setTitle('emirgokkaya_');
+        TwitterCard::setSite('@emirgokkaya_');
 
 
         $categories = NewsByCategory::with(['news' => function($query) {
@@ -232,8 +232,8 @@ class HomeController extends Controller
         OpenGraph::addProperty('locale', 'tr-TR');
         OpenGraph::addProperty('locale:alternate', ['en-us']);
 
-        TwitterCard::setTitle('emirgokkaya');
-        TwitterCard::setSite('@emirgokkaya');
+        TwitterCard::setTitle('emirgokkaya_');
+        TwitterCard::setSite('@emirgokkaya_');
 
         return view('blogs')->with('blogs', $blogs)->with('category_name', $category_name);
     }
@@ -259,8 +259,8 @@ class HomeController extends Controller
         OpenGraph::addProperty('locale', 'tr-TR');
         OpenGraph::addProperty('locale:alternate', ['en-us']);
 
-        TwitterCard::setTitle('emirgokkaya');
-        TwitterCard::setSite('@emirgokkaya');
+        TwitterCard::setTitle('emirgokkaya_');
+        TwitterCard::setSite('@emirgokkaya_');
 
 
         return view('blogs')->with('blogs', $blogs)->with('user_name', $user);
